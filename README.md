@@ -23,14 +23,19 @@ To resolve this problem, the Redlock algorithm assume we have `N` Redis masters.
 
 The detailed description of the RedLock algorithm can be found in the Redis documentation: [Distributed locks with Redis](http://redis.io/topics/distlock).
 
+### Installation
+
+```
+pip install redlock
+```
+
 ### APIs
 
 The `redlock.RedLock` class shares a similar API with the `threading.Lock` class in the  Python Standard Library.
-
 #### Basic Usage
 
 ```python
-from redlock import RedLock
+from redlock.lock import RedLock
 # By default, if no redis connection details are
 # provided, RedLock uses redis://127.0.0.1:6379/0
 lock =  RedLock("distributed_lock")
@@ -44,7 +49,7 @@ lock.release()
 As with `threading.Lock`, `redlock.RedLock` objects are context managers thus support the [With Statement](https://docs.python.org/2/reference/datamodel.html#context-managers). This way is more pythonic and recommended.
 
 ```python
-from redlock import RedLock
+from redlock.lock import RedLock
 with RedLock("distributed_lock"):
     do_something()
 ```
@@ -52,7 +57,7 @@ with RedLock("distributed_lock"):
 #### Specify multiple Redis nodes
 
 ```python
-from redlock import RedLock
+from redlock.lock import RedLock
 with RedLock("distributed_lock",
               connection_details=[
                 {'host': 'xxx.xxx.xxx.xxx', 'port': 6379, 'db': 0},
@@ -72,7 +77,7 @@ Other acceptable Redis client arguments  can be found on the [redis-py doc](http
 Usually the connection details of the Redis nodes are fixed. `RedLockFactory` can help reuse them, create multiple RedLocks but only initialize the clients once.
 
 ```python
-from redlock import RedLockFactory
+from redlock.lock import RedLockFactory
 factory = RedLockFactory(
     connection_details=[
         {'host': 'xxx.xxx.xxx.xxx'},
